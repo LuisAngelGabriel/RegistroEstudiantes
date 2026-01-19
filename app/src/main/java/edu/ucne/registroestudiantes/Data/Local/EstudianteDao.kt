@@ -16,7 +16,7 @@ interface EstudianteDao  {
     suspend fun  getById(id: Int): EstudianteEntity?
 
     @Upsert
-    suspend fun upsert(estudiante: EstudianteEntity)
+    suspend fun upsert(estudiante: EstudianteEntity): Long
 
     @Delete
     suspend fun delete(estudiante: EstudianteEntity)
