@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import edu.ucne.registroestudiantes.Domain.Model.Estudiante
 import edu.ucne.registroestudiantes.Domain.UseCase.DeleteEstudianteUseCase
-import edu.ucne.registroestudiantes.Domain.Usecase.GetEstudianteUseCase
-import edu.ucne.registroestudiantes.Domain.Usecase.UpsertEstudianteUseCase
-import edu.ucne.registroestudiantes.Domain.Usecase.ValidateEstudianteUseCase
+import edu.ucne.registroestudiantes.Domain.UseCase.GetEstudianteUseCase
+import edu.ucne.registroestudiantes.Domain.UseCase.UpsertEstudianteUseCase
+import edu.ucne.registroestudiantes.Domain.UseCase.ValidateEstudianteUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

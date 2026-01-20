@@ -1,4 +1,4 @@
-package edu.ucne.registroestudiantes.Domain.Usecase
+package edu.ucne.registroestudiantes.Domain.UseCase
 import edu.ucne.registroestudiantes.Domain.Model.Estudiante
 import edu.ucne.registroestudiantes.Domain.Repository.EstudianteRepository
 import kotlinx.coroutines.flow.Flow
