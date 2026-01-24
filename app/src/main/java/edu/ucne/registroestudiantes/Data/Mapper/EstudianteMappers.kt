@@ -1,6 +1,6 @@
 package edu.ucne.registroestudiantes.Data.Mapper
 
-import edu.ucne.registroestudiantes.Domain.Model.Estudiante
+import edu.ucne.registroestudiantes.Domain.Estudiantes.Model.Estudiante
 import edu.ucne.registroestudiantes.Data.Local.EstudianteEntity
 
 fun EstudianteEntity.toDomain():Estudiante=

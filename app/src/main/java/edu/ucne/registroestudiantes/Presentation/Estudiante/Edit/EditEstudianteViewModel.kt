@@ -3,7 +3,7 @@ package edu.ucne.registroestudiantes.Presentation.Estudiante.Edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import edu.ucne.registroestudiantes.Domain.Model.Estudiante
+import edu.ucne.registroestudiantes.Domain.Estudiantes.Model.Estudiante
 import edu.ucne.registroestudiantes.Domain.UseCase.DeleteEstudianteUseCase
 import edu.ucne.registroestudiantes.Domain.UseCase.GetEstudianteUseCase
 import edu.ucne.registroestudiantes.Domain.UseCase.UpsertEstudianteUseCase

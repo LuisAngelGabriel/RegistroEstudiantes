@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,33 +15,47 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import edu.ucne.registroestudiantes.Domain.Model.Estudiante
+import edu.ucne.registroestudiantes.Domain.Estudiantes.Model.Estudiante
 
 @Composable
 fun EstudianteListScreen(
-    onNavigateToEdit: (Int) -> Unit,
-    onNavigateToCreate: () -> Unit,
+    onDrawer: () -> Unit,
+    goToEstudiante: (Int) -> Unit,
+    createEstudiante: () -> Unit,
     viewModel: ListEstudianteViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     EstudianteListBody(
         state = state,
+        onDrawer = onDrawer,
         onEvent = { event ->
             when (event) {
-                is ListEstudianteUiEvent.Edit -> onNavigateToEdit(event.id)
-                is ListEstudianteUiEvent.CreateNew -> onNavigateToCreate()
+                is ListEstudianteUiEvent.Edit -> goToEstudiante(event.id)
+                is ListEstudianteUiEvent.CreateNew -> createEstudiante()
                 else -> viewModel.onEvent(event)
             }
         }
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun EstudianteListBody(
     state: ListEstudianteUiState,
+    onDrawer: () -> Unit,
     onEvent: (ListEstudianteUiEvent) -> Unit
 ) {
     Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = { Text("Listado de Estudiantes") },
+                navigationIcon = {
+                    IconButton(onClick = onDrawer) {
+                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
+                    }
+                }
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(onClick = { onEvent(ListEstudianteUiEvent.CreateNew) }) {
                 Text("+")
@@ -112,6 +127,6 @@ private fun EstudianteListBodyPreview() {
                 Estudiante(estudianteId = 2, nombres = "Juana Castro", email = "juana@email.com", edad = 22)
             )
         )
-        EstudianteListBody(state) {}
+        EstudianteListBody(state, onDrawer = {}, onEvent = {})
     }
 }
