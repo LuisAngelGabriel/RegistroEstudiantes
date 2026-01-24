@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("androidx.room") version "2.7.2" apply false
     id("com.google.devtools.ksp")
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21"
     id("com.google.dagger.hilt.android") version "2.57.1"
 }
 
@@ -56,11 +57,12 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
 
+    implementation("androidx.compose.material:material-icons-extended")
+
     //navegacion
     implementation("androidx.navigation:navigation-compose:2.9.3")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
-
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
     //room
     implementation("androidx.room:room-runtime:2.7.2")
     implementation(libs.androidx.room.common.jvm)
