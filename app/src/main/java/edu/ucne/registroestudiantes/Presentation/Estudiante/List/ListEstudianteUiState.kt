@@ -1,5 +1,5 @@
 package edu.ucne.registroestudiantes.Presentation.Estudiante.List
-import edu.ucne.registroestudiantes.Domain.Model.Estudiante
+import edu.ucne.registroestudiantes.Domain.Estudiantes.Model.Estudiante
 
 data class ListEstudianteUiState(
     val isLoading: Boolean = false,

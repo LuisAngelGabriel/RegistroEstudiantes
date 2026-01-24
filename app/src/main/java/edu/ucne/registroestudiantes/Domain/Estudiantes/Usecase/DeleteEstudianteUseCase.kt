@@ -1,6 +1,6 @@
 package edu.ucne.registroestudiantes.Domain.UseCase
 
-import edu.ucne.registroestudiantes.Domain.Repository.EstudianteRepository
+import edu.ucne.registroestudiantes.Domain.Estudiantes.Repository.EstudianteRepository
 import javax.inject.Inject
 
 class DeleteEstudianteUseCase @Inject constructor(

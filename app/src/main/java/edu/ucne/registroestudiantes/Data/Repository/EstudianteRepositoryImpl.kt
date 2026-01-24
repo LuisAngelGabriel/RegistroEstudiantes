@@ -2,8 +2,8 @@ package edu.ucne.registroestudiantes.Data.Repository
 
 import edu.ucne.registroestudiantes.Data.Local.EstudianteDao
 import edu.ucne.registroestudiantes.Data.Local.EstudianteEntity
-import edu.ucne.registroestudiantes.Domain.Model.Estudiante
-import edu.ucne.registroestudiantes.Domain.Repository.EstudianteRepository
+import edu.ucne.registroestudiantes.Domain.Estudiantes.Model.Estudiante
+import edu.ucne.registroestudiantes.Domain.Estudiantes.Repository.EstudianteRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

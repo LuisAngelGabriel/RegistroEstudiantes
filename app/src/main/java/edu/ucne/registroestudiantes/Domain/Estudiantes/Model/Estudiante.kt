@@ -1,4 +1,4 @@
-package edu.ucne.registroestudiantes.Domain.Model
+package edu.ucne.registroestudiantes.Domain.Estudiantes.Model
 
 class Estudiante (
     val estudianteId: Int=0,

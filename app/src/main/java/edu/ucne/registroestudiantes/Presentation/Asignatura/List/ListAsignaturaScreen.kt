@@ -1,4 +1,4 @@
-package edu.ucne.registroestudiantes.Presentation.Estudiante.List
+package edu.ucne.registroestudiantes.Presentation.Asignatura.List
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -15,23 +15,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import edu.ucne.registroestudiantes.Domain.Estudiantes.Model.Estudiante
+import edu.ucne.registroestudiantes.Domain.Asignaturas.Model.Asignaturas
 
 @Composable
-fun EstudianteListScreen(
+fun AsignaturaListScreen(
     onDrawer: () -> Unit,
-    goToEstudiante: (Int) -> Unit,
-    createEstudiante: () -> Unit,
-    viewModel: ListEstudianteViewModel = hiltViewModel()
+    goToAsignatura: (Int) -> Unit,
+    createAsignatura: () -> Unit,
+    viewModel: ListAsignaturaViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    EstudianteListBody(
+    AsignaturaListBody(
         state = state,
         onDrawer = onDrawer,
         onEvent = { event ->
             when (event) {
-                is ListEstudianteUiEvent.Edit -> goToEstudiante(event.id)
-                is ListEstudianteUiEvent.CreateNew -> createEstudiante()
+                is ListAsignaturaUiEvent.Edit -> goToAsignatura(event.id)
+                is ListAsignaturaUiEvent.CreateNew -> createAsignatura()
                 else -> viewModel.onEvent(event)
             }
         }
@@ -40,15 +40,15 @@ fun EstudianteListScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun EstudianteListBody(
-    state: ListEstudianteUiState,
+private fun AsignaturaListBody(
+    state: ListAsignaturaUiState,
     onDrawer: () -> Unit,
-    onEvent: (ListEstudianteUiEvent) -> Unit
+    onEvent: (ListAsignaturaUiEvent) -> Unit
 ) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Listado de Estudiantes") },
+                title = { Text("Listado de Asignaturas") },
                 navigationIcon = {
                     IconButton(onClick = onDrawer) {
                         Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
@@ -57,7 +57,7 @@ private fun EstudianteListBody(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { onEvent(ListEstudianteUiEvent.CreateNew) }) {
+            FloatingActionButton(onClick = { onEvent(ListAsignaturaUiEvent.CreateNew) }) {
                 Text("+")
             }
         }
@@ -75,11 +75,11 @@ private fun EstudianteListBody(
                     .fillMaxSize()
                     .padding(16.dp)
             ) {
-                items(state.estudiantes) { estudiante ->
-                    EstudianteCard(
-                        estudiante = estudiante,
-                        onClick = { onEvent(ListEstudianteUiEvent.Edit(estudiante.estudianteId)) },
-                        onDelete = { onEvent(ListEstudianteUiEvent.Delete(estudiante.estudianteId)) }
+                items(state.asignaturas) { asignatura ->
+                    AsignaturaCard(
+                        asignatura = asignatura,
+                        onClick = { onEvent(ListAsignaturaUiEvent.Edit(asignatura.asignaturaId)) },
+                        onDelete = { onEvent(ListAsignaturaUiEvent.Delete(asignatura.asignaturaId)) }
                     )
                 }
             }
@@ -88,8 +88,8 @@ private fun EstudianteListBody(
 }
 
 @Composable
-private fun EstudianteCard(
-    estudiante: Estudiante,
+private fun AsignaturaCard(
+    asignatura: Asignaturas,
     onClick: () -> Unit,
     onDelete: (Int) -> Unit,
 ) {
@@ -106,11 +106,11 @@ private fun EstudianteCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(estudiante.nombres, style = MaterialTheme.typography.titleMedium)
-                Text(estudiante.email, style = MaterialTheme.typography.bodySmall)
-                Text("Edad: ${estudiante.edad}", style = MaterialTheme.typography.bodyMedium)
+                Text(asignatura.nombre, style = MaterialTheme.typography.titleMedium)
+                Text("Código: ${asignatura.codigo}", style = MaterialTheme.typography.bodySmall)
+                Text("Aula: ${asignatura.aula} | Créditos: ${asignatura.creditos}", style = MaterialTheme.typography.bodyMedium)
             }
-            IconButton(onClick = { onDelete(estudiante.estudianteId) }) {
+            IconButton(onClick = { onDelete(asignatura.asignaturaId) }) {
                 Icon(Icons.Default.Delete, contentDescription = "Eliminar")
             }
         }
@@ -119,14 +119,14 @@ private fun EstudianteCard(
 
 @Preview(showBackground = true)
 @Composable
-private fun EstudianteListBodyPreview() {
+private fun AsignaturaListBodyPreview() {
     MaterialTheme {
-        val state = ListEstudianteUiState(
-            estudiantes = listOf(
-                Estudiante(estudianteId = 1, nombres = "Jose Duarte", email = "jose@email.com", edad = 20),
-                Estudiante(estudianteId = 2, nombres = "Juana Castro", email = "juana@email.com", edad = 22)
+        val state = ListAsignaturaUiState(
+            asignaturas = listOf(
+                Asignaturas(asignaturaId = 1, codigo = 101, nombre = "Matemática", aula = 201, creditos = 4),
+                Asignaturas(asignaturaId = 2, codigo = 102, nombre = "Programación", aula = 305, creditos = 3)
             )
         )
-        EstudianteListBody(state, onDrawer = {}, onEvent = {})
+        AsignaturaListBody(state, onDrawer = {}, onEvent = {})
     }
 }
