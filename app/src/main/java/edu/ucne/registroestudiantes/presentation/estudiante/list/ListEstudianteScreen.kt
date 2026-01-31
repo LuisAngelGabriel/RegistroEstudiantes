@@ -11,7 +11,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -114,19 +113,5 @@ private fun EstudianteCard(
                 Icon(Icons.Default.Delete, contentDescription = "Eliminar")
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun EstudianteListBodyPreview() {
-    MaterialTheme {
-        val state = ListEstudianteUiState(
-            estudiantes = listOf(
-                Estudiante(estudianteId = 1, nombres = "Jose Duarte", email = "jose@email.com", edad = 20),
-                Estudiante(estudianteId = 2, nombres = "Juana Castro", email = "juana@email.com", edad = 22)
-            )
-        )
-        EstudianteListBody(state, onDrawer = {}, onEvent = {})
     }
 }

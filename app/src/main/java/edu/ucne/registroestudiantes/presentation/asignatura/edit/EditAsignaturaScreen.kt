@@ -4,12 +4,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -18,24 +20,25 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 @Composable
 fun AsignaturaScreen(
     asignaturaId: Int?,
+    viewModel: AsignaturaViewModel = hiltViewModel(),
     goBack: () -> Unit,
-    onDrawer: () -> Unit,
-    viewModel: AsignaturaViewModel = hiltViewModel()
+    onDrawer: () -> Unit
 ) {
-    LaunchedEffect(asignaturaId) {
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
+
+    remember(asignaturaId) {
         viewModel.onEvent(AsignaturaUiEvent.Load(asignaturaId))
+        true
     }
 
-    val state by viewModel.state.collectAsStateWithLifecycle()
-
-    LaunchedEffect(state.saved, state.deleted) {
-        if (state.saved || state.deleted) {
+    if (uiState.saved || uiState.deleted) {
+        SideEffect {
             goBack()
         }
     }
 
-    AsignaturaBody(
-        state = state,
+    AsignaturaBodyScreen(
+        uiState = uiState,
         onEvent = viewModel::onEvent,
         goBack = goBack,
         onDrawer = onDrawer
@@ -44,8 +47,8 @@ fun AsignaturaScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AsignaturaBody(
-    state: EditAsignaturaUiState,
+fun AsignaturaBodyScreen(
+    uiState: EditAsignaturaUiState,
     onEvent: (AsignaturaUiEvent) -> Unit,
     goBack: () -> Unit,
     onDrawer: () -> Unit
@@ -53,7 +56,7 @@ private fun AsignaturaBody(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(if (state.isNew) "Nueva Asignatura" else "Editar Asignatura") },
+                title = { Text(if (uiState.isNew) "Nueva Asignatura" else "Editar Asignatura") },
                 navigationIcon = {
                     IconButton(onClick = onDrawer) {
                         Icon(Icons.Default.Menu, contentDescription = "Menu")
@@ -66,102 +69,93 @@ private fun AsignaturaBody(
                 }
             )
         }
-    ) { padding ->
+    ) { innerPadding ->
         Column(
             modifier = Modifier
-                .padding(padding)
-                .padding(16.dp)
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(8.dp)
         ) {
-            OutlinedTextField(
-                value = state.nombre,
-                onValueChange = { onEvent(AsignaturaUiEvent.NombreChanged(it)) },
-                label = { Text("Nombre de la Asignatura") },
-                isError = state.nombreError != null,
-                modifier = Modifier.fillMaxWidth()
-            )
-            state.nombreError?.let {
-                Text(text = it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
-            }
+            ElevatedCard(modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+                    OutlinedTextField(
+                        label = { Text("Nombre de la Asignatura") },
+                        value = uiState.nombre,
+                        onValueChange = { onEvent(AsignaturaUiEvent.NombreChanged(it)) },
+                        isError = uiState.nombreError != null,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    uiState.nombreError?.let {
+                        Text(text = it, color = Color.Red, style = MaterialTheme.typography.bodySmall)
+                    }
 
-            Spacer(Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
-            OutlinedTextField(
-                value = state.codigo?.toString() ?: "",
-                onValueChange = { onEvent(AsignaturaUiEvent.CodigoChanged(it)) },
-                label = { Text("Código") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                isError = state.codigoError != null,
-                modifier = Modifier.fillMaxWidth()
-            )
-            state.codigoError?.let {
-                Text(text = it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
-            }
+                    OutlinedTextField(
+                        label = { Text("Código") },
+                        value = uiState.codigo?.toString() ?: "",
+                        onValueChange = { onEvent(AsignaturaUiEvent.CodigoChanged(it)) },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        isError = uiState.codigoError != null,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    uiState.codigoError?.let {
+                        Text(text = it, color = Color.Red, style = MaterialTheme.typography.bodySmall)
+                    }
 
-            Spacer(Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
-            OutlinedTextField(
-                value = state.aula?.toString() ?: "",
-                onValueChange = { onEvent(AsignaturaUiEvent.AulaChanged(it)) },
-                label = { Text("Aula") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                isError = state.aulaError != null,
-                modifier = Modifier.fillMaxWidth()
-            )
-            state.aulaError?.let {
-                Text(text = it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
-            }
+                    OutlinedTextField(
+                        label = { Text("Aula") },
+                        value = uiState.aula?.toString() ?: "",
+                        onValueChange = { onEvent(AsignaturaUiEvent.AulaChanged(it)) },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        isError = uiState.aulaError != null,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    uiState.aulaError?.let {
+                        Text(text = it, color = Color.Red, style = MaterialTheme.typography.bodySmall)
+                    }
 
-            Spacer(Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
-            OutlinedTextField(
-                value = state.creditos?.toString() ?: "",
-                onValueChange = { onEvent(AsignaturaUiEvent.CreditosChanged(it)) },
-                label = { Text("Créditos") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                isError = state.creditosError != null,
-                modifier = Modifier.fillMaxWidth()
-            )
-            state.creditosError?.let {
-                Text(text = it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
-            }
+                    OutlinedTextField(
+                        label = { Text("Créditos") },
+                        value = uiState.creditos?.toString() ?: "",
+                        onValueChange = { onEvent(AsignaturaUiEvent.CreditosChanged(it)) },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        isError = uiState.creditosError != null,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    uiState.creditosError?.let {
+                        Text(text = it, color = Color.Red, style = MaterialTheme.typography.bodySmall)
+                    }
 
-            Spacer(Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Button(
-                    onClick = { onEvent(AsignaturaUiEvent.Save) },
-                    enabled = !state.isSaving,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("Guardar")
-                }
-
-                if (!state.isNew) {
-                    Spacer(Modifier.width(8.dp))
-                    OutlinedButton(
-                        onClick = { onEvent(AsignaturaUiEvent.Delete) },
-                        enabled = !state.isDeleting,
-                        modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        Text("Eliminar")
+                        OutlinedButton(
+                            onClick = { onEvent(AsignaturaUiEvent.Save) },
+                            enabled = !uiState.isSaving
+                        ) {
+                            Icon(Icons.Default.Edit, contentDescription = "Guardar")
+                            Text("Guardar")
+                        }
+
+                        if (!uiState.isNew) {
+                            OutlinedButton(
+                                onClick = { onEvent(AsignaturaUiEvent.Delete) },
+                                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red)
+                            ) {
+                                Icon(Icons.Default.Delete, contentDescription = "Eliminar")
+                            }
+                        }
                     }
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun AsignaturaBodyPreview() {
-    val state = EditAsignaturaUiState(
-        nombre = "Programación Móvil",
-        codigo = 202,
-        aula = 405,
-        creditos = 4
-    )
-    MaterialTheme {
-        AsignaturaBody(state = state, onEvent = {}, goBack = {}, onDrawer = {})
     }
 }

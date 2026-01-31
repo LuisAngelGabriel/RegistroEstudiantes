@@ -1,130 +1,141 @@
 package edu.ucne.registroestudiantes.presentation.estudiante.edit
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditEstudianteScreen(
     estudianteId: Int?,
     onNavigateBack: () -> Unit,
+    onDrawer: () -> Unit,
     viewModel: EditEstudianteViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(estudianteId) {
-        viewModel.onEvent(EditEstudianteUiEvent.Load(estudianteId))
-    }
-
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    LaunchedEffect(state.saved, state.deleted) {
-        if (state.saved || state.deleted) {
+    remember(estudianteId) {
+        viewModel.onEvent(EditEstudianteUiEvent.Load(estudianteId))
+        true
+    }
+
+    if (state.saved || state.deleted) {
+        SideEffect {
             onNavigateBack()
         }
     }
 
-    EditEstudianteBody(state, viewModel::onEvent)
+    EditEstudianteBody(
+        state = state,
+        onEvent = viewModel::onEvent,
+        onNavigateBack = onNavigateBack,
+        onDrawer = onDrawer
+    )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun EditEstudianteBody(
     state: EditEstudianteUiState,
-    onEvent: (EditEstudianteUiEvent) -> Unit
+    onEvent: (EditEstudianteUiEvent) -> Unit,
+    onNavigateBack: () -> Unit,
+    onDrawer: () -> Unit
 ) {
-    Scaffold { padding ->
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = { Text(if (state.isNew) "Nuevo Estudiante" else "Editar Estudiante") },
+                navigationIcon = {
+                    IconButton(onClick = onDrawer) {
+                        Icon(Icons.Default.Menu, contentDescription = "Menu")
+                    }
+                },
+                actions = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Regresar")
+                    }
+                }
+            )
+        }
+    ) { padding ->
         Column(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(padding)
-                .padding(16.dp)
+                .padding(8.dp)
         ) {
-            OutlinedTextField(
-                value = state.nombres,
-                onValueChange = { onEvent(EditEstudianteUiEvent.NombresChanged(it)) },
-                label = { Text("Nombres") },
-                isError = state.nombresError != null,
-                modifier = Modifier.fillMaxWidth()
-            )
-            if (state.nombresError != null) {
-                Text(
-                    text = state.nombresError,
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
+            ElevatedCard(modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+                    OutlinedTextField(
+                        value = state.nombres,
+                        onValueChange = { onEvent(EditEstudianteUiEvent.NombresChanged(it)) },
+                        label = { Text("Nombres") },
+                        isError = state.nombresError != null,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    state.nombresError?.let { Text(text = it, color = Color.Red) }
 
-            Spacer(Modifier.height(12.dp))
+                    Spacer(Modifier.height(8.dp))
 
-            OutlinedTextField(
-                value = state.email,
-                onValueChange = { onEvent(EditEstudianteUiEvent.EmailChanged(it)) },
-                label = { Text("Email") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                isError = state.emailError != null,
-                modifier = Modifier.fillMaxWidth()
-            )
-            if (state.emailError != null) {
-                Text(
-                    text = state.emailError,
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
+                    OutlinedTextField(
+                        value = state.email,
+                        onValueChange = { onEvent(EditEstudianteUiEvent.EmailChanged(it)) },
+                        label = { Text("Email") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                        isError = state.emailError != null,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    state.emailError?.let { Text(text = it, color = Color.Red) }
 
-            Spacer(Modifier.height(12.dp))
+                    Spacer(Modifier.height(8.dp))
 
-            OutlinedTextField(
-                value = state.edad?.toString() ?: "",
-                onValueChange = { onEvent(EditEstudianteUiEvent.EdadChanged(it)) },
-                label = { Text("Edad") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                isError = state.edadError != null,
-                modifier = Modifier.fillMaxWidth()
-            )
-            if (state.edadError != null) {
-                Text(
-                    text = state.edadError,
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
+                    OutlinedTextField(
+                        value = state.edad?.toString() ?: "",
+                        onValueChange = { onEvent(EditEstudianteUiEvent.EdadChanged(it)) },
+                        label = { Text("Edad") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        isError = state.edadError != null,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    state.edadError?.let { Text(text = it, color = Color.Red) }
 
-            Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(16.dp))
 
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Button(
-                    onClick = { onEvent(EditEstudianteUiEvent.Save) },
-                    enabled = !state.isSaving,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("Guardar")
-                }
-
-                if (!state.isNew) {
-                    Spacer(Modifier.width(8.dp))
-                    OutlinedButton(
-                        onClick = { onEvent(EditEstudianteUiEvent.Delete) },
-                        enabled = !state.isDeleting,
-                        modifier = Modifier.weight(1f)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        Text("Eliminar")
+                        OutlinedButton(
+                            onClick = { onEvent(EditEstudianteUiEvent.Save) },
+                            enabled = !state.isSaving
+                        ) {
+                            Icon(Icons.Default.Edit, contentDescription = "Guardar")
+                            Text("Guardar")
+                        }
+
+                        if (!state.isNew) {
+                            OutlinedButton(
+                                onClick = { onEvent(EditEstudianteUiEvent.Delete) },
+                                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red)
+                            ) {
+                                Icon(Icons.Default.Delete, contentDescription = "Eliminar")
+                            }
+                        }
                     }
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun EditEstudianteBodyPreview() {
-    val state = EditEstudianteUiState(
-        nombres = "Jose Duarte",
-        email = "jose@email.com",
-        edad = 20
-    )
-    MaterialTheme {
-        EditEstudianteBody(state = state) {}
     }
 }
