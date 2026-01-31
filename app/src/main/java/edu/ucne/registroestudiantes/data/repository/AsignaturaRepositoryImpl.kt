@@ -1,6 +1,6 @@
 package edu.ucne.registroestudiantes.data.repository
-import edu.ucne.registroestudiantes.data.local.AsignaturaDao
-import edu.ucne.registroestudiantes.data.local.AsignaturaEntity
+import edu.ucne.registroestudiantes.data.local.dao.AsignaturaDao
+import edu.ucne.registroestudiantes.data.local.entities.AsignaturaEntity
 import edu.ucne.registroestudiantes.domain.asignaturas.model.Asignaturas
 import edu.ucne.registroestudiantes.domain.asignaturas.repository.AsignaturaRepository
 import kotlinx.coroutines.flow.Flow

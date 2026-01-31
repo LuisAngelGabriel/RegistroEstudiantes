@@ -1,16 +1,17 @@
-package edu.ucne.registroestudiantes.data.local
+package edu.ucne.registroestudiantes.data.local.dao
+
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
+import edu.ucne.registroestudiantes.data.local.entities.EstudianteEntity
 import kotlinx.coroutines.flow.Flow
-
 
 @Dao
 interface EstudianteDao  {
 
     @Query("SELECT * FROM estudiantes ORDER BY estudianteId DESC")
-    fun observerAll():Flow<List<EstudianteEntity>>
+    fun observerAll(): Flow<List<EstudianteEntity>>
 
     @Query("SELECT * FROM estudiantes WHERE estudianteId = :id")
     suspend fun  getById(id: Int): EstudianteEntity?

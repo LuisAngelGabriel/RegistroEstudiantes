@@ -1,6 +1,6 @@
 package edu.ucne.registroestudiantes.data.mapper
 import edu.ucne.registroestudiantes.domain.asignaturas.model.Asignaturas
-import edu.ucne.registroestudiantes.data.local.AsignaturaEntity
+import edu.ucne.registroestudiantes.data.local.entities.AsignaturaEntity
 
 fun AsignaturaEntity.toDomain(): Asignaturas =
     Asignaturas(

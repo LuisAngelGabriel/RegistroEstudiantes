@@ -7,8 +7,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import edu.ucne.registroestudiantes.data.database.EstudianteDB
-import edu.ucne.registroestudiantes.data.local.AsignaturaDao
-import edu.ucne.registroestudiantes.data.local.EstudianteDao
+import edu.ucne.registroestudiantes.data.local.dao.AsignaturaDao
+import edu.ucne.registroestudiantes.data.local.dao.EstudianteDao
 import edu.ucne.registroestudiantes.data.repository.AsignaturaRepositoryImpl
 import edu.ucne.registroestudiantes.data.repository.EstudianteRepositoryImpl
 import edu.ucne.registroestudiantes.domain.asignaturas.repository.AsignaturaRepository
