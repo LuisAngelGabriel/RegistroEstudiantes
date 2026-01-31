@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.People
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -76,8 +77,16 @@ fun DrawerMenu(
                             icon = Icons.Filled.Book,
                             isSelected = selectedItem.value == "Asignaturas"
                         ) {
-                            handleItemClick(Screen.AsignaturaList, "Asignaturas")
+                            handleItemClick(Screen.AsignaturaList, "Asignaturas")                        }
+
+                        DrawerItem(
+                            title = "Penalidades",
+                            icon = Icons.Filled.Warning,
+                            isSelected = selectedItem.value == "Penalidades"
+                        ) {
+                            handleItemClick(Screen.TipoPenalidadList, "Penalidades")
                         }
+
                     }
                 }
             }
