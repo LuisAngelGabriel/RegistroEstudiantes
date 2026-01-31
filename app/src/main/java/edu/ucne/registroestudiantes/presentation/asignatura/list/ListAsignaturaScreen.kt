@@ -11,7 +11,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -114,19 +113,5 @@ private fun AsignaturaCard(
                 Icon(Icons.Default.Delete, contentDescription = "Eliminar")
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun AsignaturaListBodyPreview() {
-    MaterialTheme {
-        val state = ListAsignaturaUiState(
-            asignaturas = listOf(
-                Asignaturas(asignaturaId = 1, codigo = 101, nombre = "Matemática", aula = 201, creditos = 4),
-                Asignaturas(asignaturaId = 2, codigo = 102, nombre = "Programación", aula = 305, creditos = 3)
-            )
-        )
-        AsignaturaListBody(state, onDrawer = {}, onEvent = {})
     }
 }
