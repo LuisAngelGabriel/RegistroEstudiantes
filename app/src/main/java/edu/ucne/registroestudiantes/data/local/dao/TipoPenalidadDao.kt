@@ -1,11 +1,13 @@
 package edu.ucne.registroestudiantes.data.local.dao
 
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
 import edu.ucne.registroestudiantes.data.local.entities.TipoPenalidadEntity
 import kotlinx.coroutines.flow.Flow
 
+@Dao
 interface TipoPenalidadDao {
 
     @Query("SELECT * FROM TiposPenalidades ORDER BY tipoId DESC")
