@@ -9,10 +9,13 @@ import dagger.hilt.components.SingletonComponent
 import edu.ucne.registroestudiantes.data.database.EstudianteDB
 import edu.ucne.registroestudiantes.data.local.dao.AsignaturaDao
 import edu.ucne.registroestudiantes.data.local.dao.EstudianteDao
+import edu.ucne.registroestudiantes.data.local.dao.TipoPenalidadDao
 import edu.ucne.registroestudiantes.data.repository.AsignaturaRepositoryImpl
 import edu.ucne.registroestudiantes.data.repository.EstudianteRepositoryImpl
+import edu.ucne.registroestudiantes.data.repository.TipoPenalidadRepositoryImpl
 import edu.ucne.registroestudiantes.domain.asignaturas.repository.AsignaturaRepository
 import edu.ucne.registroestudiantes.domain.estudiantes.repository.EstudianteRepository
+import edu.ucne.registroestudiantes.domain.tipopenalidad.repository.TipoPenalidadRepository
 import jakarta.inject.Singleton
 
 
@@ -68,4 +71,23 @@ object AppModule {
     fun provideAsignaturaRepository(impl: AsignaturaRepositoryImpl): AsignaturaRepository {
         return impl
     }
+
+    @Provides
+    @Singleton
+    fun provideTipoPenalidadDao(estudianteDB: EstudianteDB): TipoPenalidadDao {
+        return estudianteDB.tipoPenalidadDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideTipoPenalidadRepositoryImpl(tipoPenalidadDao: TipoPenalidadDao): TipoPenalidadRepositoryImpl {
+        return TipoPenalidadRepositoryImpl(tipoPenalidadDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTipoPenalidadRepository(impl: TipoPenalidadRepositoryImpl): TipoPenalidadRepository {
+        return impl
+    }
+
 }

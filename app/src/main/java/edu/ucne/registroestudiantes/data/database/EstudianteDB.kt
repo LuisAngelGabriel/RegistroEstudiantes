@@ -25,5 +25,5 @@ abstract class EstudianteDB: RoomDatabase(){
     abstract fun estudianteDao(): EstudianteDao
     abstract fun asignaturaDao(): AsignaturaDao
 
-    abstract fun TipoPenalidadDao(): TipoPenalidadDao
+    abstract fun tipoPenalidadDao(): TipoPenalidadDao
 }
