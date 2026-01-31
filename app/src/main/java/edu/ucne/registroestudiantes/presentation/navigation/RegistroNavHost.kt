@@ -1,5 +1,4 @@
 package edu.ucne.registroestudiantes.presentation.navigation
-
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -12,6 +11,8 @@ import edu.ucne.registroestudiantes.presentation.asignatura.edit.AsignaturaScree
 import edu.ucne.registroestudiantes.presentation.asignatura.list.AsignaturaListScreen
 import edu.ucne.registroestudiantes.presentation.estudiante.list.EstudianteListScreen
 import edu.ucne.registroestudiantes.presentation.estudiante.edit.EditEstudianteScreen
+import edu.ucne.registroestudiantes.presentation.tipopenalidad.edit.TipoPenalidadScreen
+import edu.ucne.registroestudiantes.presentation.tipopenalidad.list.TipoPenalidadListScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -41,7 +42,8 @@ fun RegistroNavHost(
                 val args = it.toRoute<Screen.Estudiante>()
                 EditEstudianteScreen(
                     estudianteId = args.estudianteId,
-                    onNavigateBack = { navHostController.navigateUp() }
+                    onNavigateBack = { navHostController.navigateUp() },
+                    onDrawer = { scope.launch { drawerState.open() } }
                 )
             }
 
@@ -57,6 +59,23 @@ fun RegistroNavHost(
                 val args = it.toRoute<Screen.Asignatura>()
                 AsignaturaScreen(
                     asignaturaId = args.asignaturaId,
+                    goBack = { navHostController.navigateUp() },
+                    onDrawer = { scope.launch { drawerState.open() } }
+                )
+            }
+
+            composable<Screen.TipoPenalidadList> {
+                TipoPenalidadListScreen(
+                    onDrawer = { scope.launch { drawerState.open() } },
+                    goToTipoPenalidad = { id -> navHostController.navigate(Screen.TipoPenalidad(id)) },
+                    createTipoPenalidad = { navHostController.navigate(Screen.TipoPenalidad(0)) }
+                )
+            }
+
+            composable<Screen.TipoPenalidad> {
+                val args = it.toRoute<Screen.TipoPenalidad>()
+                TipoPenalidadScreen(
+                    tipoId = args.tipoId,
                     goBack = { navHostController.navigateUp() },
                     onDrawer = { scope.launch { drawerState.open() } }
                 )
