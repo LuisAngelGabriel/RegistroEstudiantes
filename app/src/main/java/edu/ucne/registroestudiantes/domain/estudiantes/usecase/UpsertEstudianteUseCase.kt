@@ -4,32 +4,27 @@ import edu.ucne.registroestudiantes.domain.estudiantes.repository.EstudianteRepo
 import javax.inject.Inject
 
 class UpsertEstudianteUseCase @Inject constructor(
-    private val repository: EstudianteRepository
+    private val repository: EstudianteRepository,
+    private val validateEstudianteUseCase: ValidateEstudianteUseCase
 ) {
     suspend operator fun invoke(estudiante: Estudiante): Result<Int> {
+        return try {
+            val validation = validateEstudianteUseCase(
+                nombre = estudiante.nombres,
+                email = estudiante.email,
+                edad = estudiante.edad,
+                currentEstudianteId = if (estudiante.estudianteId != 0) estudiante.estudianteId else null
+            )
 
-        if (estudiante.nombres.isBlank()) {
-            return Result.failure(IllegalArgumentException("El nombre no puede estar vacío"))
-        }
-
-        if (estudiante.nombres.length > 50) {
-            return Result.failure(IllegalArgumentException("El nombre no puede tener más de 50 caracteres"))
-        }
-
-        if (estudiante.email.isBlank()) {
-            return Result.failure(IllegalArgumentException("El email no puede estar vacío"))
-        }
-
-        if (!estudiante.email.contains("@")) {
-            return Result.failure(IllegalArgumentException("Email no válido"))
-        }
-
-        if (estudiante.edad <= 0) {
-            return Result.failure(IllegalArgumentException("La edad debe ser mayor a 0"))
-        }
-
-        return runCatching {
-            repository.upsert(estudiante)
+            if (!validation.isValid) {
+                val errorMsg = validation.nombreError ?: validation.emailError ?: validation.edadError ?: "Error de validación"
+                Result.failure(IllegalArgumentException(errorMsg))
+            } else {
+                val id = repository.upsert(estudiante)
+                Result.success(id)
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 }

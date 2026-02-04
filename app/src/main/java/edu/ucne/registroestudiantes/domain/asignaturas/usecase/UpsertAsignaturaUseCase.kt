@@ -5,28 +5,28 @@ import edu.ucne.registroestudiantes.domain.asignaturas.repository.AsignaturaRepo
 import javax.inject.Inject
 
 class UpsertAsignaturaUseCase @Inject constructor(
-    private val repository: AsignaturaRepository
+    private val repository: AsignaturaRepository,
+    private val validateAsignaturaUseCase: ValidateAsignaturaUseCase
 ) {
     suspend operator fun invoke(asignatura: Asignaturas): Result<Int> {
+        return try {
+            val validation = validateAsignaturaUseCase(
+                nombre = asignatura.nombre,
+                codigo = asignatura.codigo,
+                aula = asignatura.aula,
+                creditos = asignatura.creditos,
+                currentAsignaturaId = if (asignatura.asignaturaId != 0) asignatura.asignaturaId else null
+            )
 
-        if (asignatura.nombre.isBlank()) {
-            return Result.failure(IllegalArgumentException("El nombre no puede estar vacío"))
-        }
-
-        if (asignatura.codigo <= 0) {
-            return Result.failure(IllegalArgumentException("El código debe ser mayor a 0"))
-        }
-
-        if (asignatura.aula <= 0) {
-            return Result.failure(IllegalArgumentException("El aula debe ser mayor a 0"))
-        }
-
-        if (asignatura.creditos <= 0) {
-            return Result.failure(IllegalArgumentException("Los créditos deben ser mayores a 0"))
-        }
-
-        return runCatching {
-            repository.upsert(asignatura)
+            if (!validation.isValid) {
+                val errorMsg = validation.nombreError ?: validation.codigoError ?: validation.aulaError ?: validation.creditosError ?: "Error de validación"
+                Result.failure(IllegalArgumentException(errorMsg))
+            } else {
+                val id = repository.upsert(asignatura)
+                Result.success(id)
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 }
