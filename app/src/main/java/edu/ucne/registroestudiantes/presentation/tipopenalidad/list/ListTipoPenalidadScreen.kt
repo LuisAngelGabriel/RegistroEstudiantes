@@ -16,7 +16,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import edu.ucne.registroestudiantes.domain.tipopenalidad.model.TipoPenalidad
-
 @Composable
 fun TipoPenalidadListScreen(
     onDrawer: () -> Unit,
