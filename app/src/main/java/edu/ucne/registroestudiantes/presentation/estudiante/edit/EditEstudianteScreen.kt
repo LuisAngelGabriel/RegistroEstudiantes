@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
@@ -26,9 +27,8 @@ fun EditEstudianteScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    remember(estudianteId) {
+    LaunchedEffect(estudianteId) {
         viewModel.onEvent(EditEstudianteUiEvent.Load(estudianteId))
-        true
     }
 
     if (state.saved || state.deleted) {
@@ -137,5 +137,18 @@ private fun EditEstudianteBody(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun EditEstudiantePreview() {
+    MaterialTheme {
+        EditEstudianteBody(
+            state = EditEstudianteUiState(nombres = "Juan", email = "juan@test.com", edad = 20),
+            onEvent = {},
+            onNavigateBack = {},
+            onDrawer = {}
+        )
     }
 }

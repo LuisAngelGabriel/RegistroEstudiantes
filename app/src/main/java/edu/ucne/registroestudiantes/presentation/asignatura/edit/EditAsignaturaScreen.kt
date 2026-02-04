@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
@@ -26,9 +27,8 @@ fun AsignaturaScreen(
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
 
-    remember(asignaturaId) {
+    LaunchedEffect(asignaturaId) {
         viewModel.onEvent(AsignaturaUiEvent.Load(asignaturaId))
-        true
     }
 
     if (uiState.saved || uiState.deleted) {
@@ -157,5 +157,18 @@ fun AsignaturaBodyScreen(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AsignaturaPreview() {
+    MaterialTheme {
+        AsignaturaBodyScreen(
+            uiState = EditAsignaturaUiState(nombre = "Sistemas", codigo = 101, aula = 202, creditos = 4),
+            onEvent = {},
+            goBack = {},
+            onDrawer = {}
+        )
     }
 }

@@ -12,10 +12,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import edu.ucne.registroestudiantes.domain.tipopenalidad.model.TipoPenalidad
-
 @Composable
 fun TipoPenalidadListScreen(
     onDrawer: () -> Unit,
@@ -113,5 +113,22 @@ private fun TipoPenalidadCard(
                 Icon(Icons.Default.Delete, contentDescription = "Eliminar")
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TipoPenalidadListPreview() {
+    MaterialTheme {
+        TipoPenalidadListBody(
+            state = ListTipoPenalidadUiState(
+                tiposPenalidades = listOf(
+                    TipoPenalidad(1, "Atraso", "10 min tarde", 5),
+                    TipoPenalidad(2, "Inasistencia", "No vino", 10)
+                )
+            ),
+            onDrawer = {},
+            onEvent = {}
+        )
     }
 }
