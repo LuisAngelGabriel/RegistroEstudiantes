@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import edu.ucne.registroestudiantes.domain.asignaturas.model.Asignaturas
@@ -113,5 +114,22 @@ private fun AsignaturaCard(
                 Icon(Icons.Default.Delete, contentDescription = "Eliminar")
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AsignaturaListPreview() {
+    MaterialTheme {
+        AsignaturaListBody(
+            state = ListAsignaturaUiState(
+                asignaturas = listOf(
+                    Asignaturas(1, 101, "Programación I", 101, 3),
+                    Asignaturas(2, 202, "Base de Datos", 202, 4)
+                )
+            ),
+            onDrawer = {},
+            onEvent = {}
+        )
     }
 }

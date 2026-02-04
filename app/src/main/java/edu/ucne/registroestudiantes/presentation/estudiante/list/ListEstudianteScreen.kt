@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import edu.ucne.registroestudiantes.domain.estudiantes.model.Estudiante
@@ -24,6 +25,7 @@ fun EstudianteListScreen(
     viewModel: ListEstudianteViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
     EstudianteListBody(
         state = state,
         onDrawer = onDrawer,
@@ -113,5 +115,22 @@ private fun EstudianteCard(
                 Icon(Icons.Default.Delete, contentDescription = "Eliminar")
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun EstudianteListPreview() {
+    MaterialTheme {
+        EstudianteListBody(
+            state = ListEstudianteUiState(
+                estudiantes = listOf(
+                    Estudiante(1, "Jose Lopez", "jose@test.com", 22),
+                    Estudiante(2, "Maria Garcia", "maria@test.com", 21)
+                )
+            ),
+            onDrawer = {},
+            onEvent = {}
+        )
     }
 }

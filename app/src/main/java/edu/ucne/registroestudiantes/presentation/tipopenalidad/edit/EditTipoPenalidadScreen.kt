@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
@@ -26,9 +27,8 @@ fun TipoPenalidadScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    remember(tipoId) {
+    LaunchedEffect(tipoId) {
         viewModel.onEvent(TipoPenalidadUiEvent.Load(tipoId))
-        true
     }
 
     if (state.saved || state.deleted) {
@@ -136,5 +136,18 @@ private fun TipoPenalidadBody(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TipoPenalidadPreview() {
+    MaterialTheme {
+        TipoPenalidadBody(
+            state = EditTipoPenalidadUiState(nombre = "Tardanza", descripcion = "Llegada tarde", puntosDescuento = 5),
+            onEvent = {},
+            goBack = {},
+            onDrawer = {}
+        )
     }
 }
